@@ -1,4 +1,4 @@
-#include"Seguidor.hpp"
+#include"Seguidor.h"
 void Seguidor :: modo_seguidor(int Kp, int Ki, int Kd, int Velocidad) {
   leer_sensores();
   P = Error;
