@@ -7,3 +7,4 @@ init    KEYWORD2
 leer_sensores   KEYWORD2
 print_sensores  KEYWORD2
 modo_seguidor   KEYWORD2
+modo_bluetooth  KEYWORD2

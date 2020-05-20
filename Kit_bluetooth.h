@@ -6,21 +6,22 @@
 */
 
 #include <Robot.h>
-//#include <SoftwareSerial.h>
 #include <SoftwareSerial.h> //Libreria para nuevo puerto serial para el bluetooth
 
 class Kit_bluetooth : public Robot
 {
 private:
     /* data */
-    int B_TX= 8;
-    int B_RX= 9;
+    const uint8_t B_TX= 8;
+    const uint8_t B_RX= 9;
     SoftwareSerial Bluetooth; // RX, TX
     uint8_t Estado;
 
 public:
 
     void init();
+    uint8_t Leer_BT();
+    void modo_bluetooth();
     Kit_bluetooth() : Robot::Robot(), Bluetooth(B_TX, B_RX) {}
     ~Kit_bluetooth();
 };
