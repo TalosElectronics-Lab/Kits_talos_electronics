@@ -1,5 +1,5 @@
-#include"Seguidor.h"
-void Seguidor :: modo_seguidor(int Kp, int Ki, int Kd, int Velocidad) {
+#include <Kit_seguidor.h>
+void Kit_seguidor::modo_seguidor(int Kp, int Ki, int Kd, int Velocidad) {
   leer_sensores();
   P = Error;
   I = I + Anteriror_I;
@@ -25,17 +25,15 @@ void Seguidor :: modo_seguidor(int Kp, int Ki, int Kd, int Velocidad) {
   //frenos();
 }
 
-void Seguidor::init()
-{
-    Motores_init();
-    pinMode(S1, INPUT_PULLUP);
-    pinMode(S2, INPUT_PULLUP);
-    pinMode(S3, INPUT_PULLUP);
-    pinMode(S4, INPUT_PULLUP);
-    pinMode(S5, INPUT_PULLUP);
+void Kit_seguidor::init() {
+  Motores_init();
+  pinMode(S1, INPUT_PULLUP);
+  pinMode(S2, INPUT_PULLUP);
+  pinMode(S3, INPUT_PULLUP);
+  pinMode(S4, INPUT_PULLUP);
+  pinMode(S5, INPUT_PULLUP);
 }
-void Seguidor::leer_sensores()
-{
+void Kit_seguidor::leer_sensores() {
   sensor[0] = digitalRead(S1);
   sensor[1] = digitalRead(S2);
   sensor[2] = digitalRead(S3);
@@ -65,8 +63,7 @@ void Seguidor::leer_sensores()
   else if ((sensor[0] == 1) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
     Error = -4;
 }
-void Seguidor::print_sensores()
-{
+void Kit_seguidor::print_sensores() {
   for (size_t i = 0; i < 5; i++) {
     Serial.print(sensor[i]);
     Serial.print("\t");
@@ -74,5 +71,5 @@ void Seguidor::print_sensores()
   }
   Serial.println("");
 }
-Seguidor::Seguidor() : Robot::Robot() {}
-Seguidor::~Seguidor() {}
+Kit_seguidor::Kit_seguidor() : Robot::Robot() {}
+Kit_seguidor::~Kit_seguidor() {}

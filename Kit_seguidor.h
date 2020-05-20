@@ -1,7 +1,13 @@
-#include "Robot.hpp"
+/*
+ *  Clase Seguidor que hereda todos los metodos de Robot.h
+ *  kit Bluetooth 2.0
+ *  Taloselectronics
+ *  soporte@taloselectronics.com Rafael Lozano Rolón
+*/
 
-//Clase Seguidor que hereda todos los metodos de Robot.h
-class Seguidor : public Robot
+#include <Robot.h>
+
+class Kit_seguidor : public Robot
 {
 private:
     /* data */
@@ -16,8 +22,8 @@ private:
   float Error_Anterior = 0, Anteriror_I = 0;
 
 public:
-    Seguidor(/* args */);
-    ~Seguidor();
+    Kit_seguidor(/* args */);
+    ~Kit_seguidor();
     void init();
     void leer_sensores();
     void print_sensores();

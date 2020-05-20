@@ -1,6 +1,6 @@
-#include <Seguidor.h>
+#include <Kit_seguidor.h>
 
-Seguidor robot_1;
+Kit_seguidor robot_1;
 void setup()
 {
     robot_1.init();
