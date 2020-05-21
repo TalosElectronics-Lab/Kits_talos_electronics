@@ -1,5 +1,12 @@
-#include "Robot.h"
-
+#include <Robot.h>
+void Robot::compensar_motor_izquierdo(int velocidad)
+{
+    c_motor_izquierdo = velocidad;
+}
+void Robot::compensar_motor_derecho(int velocidad)
+{
+    c_motor_derecho = velocidad;
+}
 void Robot::Motores_init()
 {
     Serial.begin(9600);
@@ -13,6 +20,8 @@ void Robot::Motores_init()
 }
 void Robot::Motores_mv(int velocidad_izquierda, int velocidad_derecha)
 {
+    velocidad_izquierda = c_motor_izquierdo + velocidad_izquierda;
+    velocidad_derecha = c_motor_derecho + velocidad_derecha;
     if (velocidad_izquierda > 0)
     {
         analogWrite(Pwm1, velocidad_izquierda);

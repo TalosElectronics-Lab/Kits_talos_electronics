@@ -1,3 +1,8 @@
+/*
+ *  kit Evasor de obstáculos 2.0
+ *  Taloselectronics
+ *  soporte@taloselectronics.com Rafael Lozano Rolón
+ */
 #include <Kit_evasor.h>
 
 void Kit_evasor::modo_evasor(int Distancia, uint8_t velocidad)
@@ -40,14 +45,14 @@ void Kit_evasor::modo_evasor(int Distancia, uint8_t velocidad)
         if (Distancia_izq < Distancia_der)
         {
             //Obstaculo detectado en el lado izquierdo, debe girar a la derecha
-            Motores_mv(50, -50);
+            Motores_mv(velocidad_giro, -velocidad_giro);
             delay(500);
             Motores_mv(velocidad, velocidad);
         }
         else
         {
             //Obstaculo detectado en el lado derecho por lo que debe girar a la izquierda
-            Motores_mv(-50, 50);
+            Motores_mv(-velocidad_giro, velocidad_giro);
             delay(500);
             Motores_mv(velocidad, velocidad);
         }
