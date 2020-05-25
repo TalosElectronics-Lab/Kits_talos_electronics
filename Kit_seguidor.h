@@ -29,7 +29,7 @@ public:
     void init();
     void leer_sensores();
     void print_sensores();
-    void modo_seguidor(int Kp, int Ki, int Kd, int Velocidad);
+    void modo_seguidor(float Kp, float Ki, float Kd, float Velocidad);
     void frenos();
 };
 

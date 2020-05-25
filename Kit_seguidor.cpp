@@ -19,7 +19,8 @@ void Kit_seguidor::frenos()
     }
   }
 }
-void Kit_seguidor::modo_seguidor(int Kp, int Ki, int Kd, int Velocidad) {
+void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
+{
   leer_sensores();
   P = Error;
   I = I + Anteriror_I;
