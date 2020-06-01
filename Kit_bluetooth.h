@@ -15,7 +15,7 @@ private:
     const uint8_t B_TX= 8;
     const uint8_t B_RX= 9;
     SoftwareSerial Bluetooth; // RX, TX
-    uint8_t Estado;
+    char Estado;
 
 public:
 

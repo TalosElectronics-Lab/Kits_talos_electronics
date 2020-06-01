@@ -20,8 +20,20 @@ void Robot::Motores_init()
 }
 void Robot::Motores_mv(int velocidad_izquierda, int velocidad_derecha)
 {
-    velocidad_izquierda = c_motor_izquierdo + velocidad_izquierda;
-    velocidad_derecha = c_motor_derecho + velocidad_derecha;
+    if (velocidad_derecha == 0 && velocidad_izquierda == 0)
+    {
+        velocidad_izquierda=0;
+        velocidad_derecha=0;
+    }
+    else if (velocidad_izquierda < 255 || velocidad_izquierda > 0)
+    {
+        velocidad_izquierda = c_motor_izquierdo + velocidad_izquierda;
+    }
+    else if (velocidad_derecha < 255 || velocidad_derecha > 0)
+    {
+        velocidad_derecha = c_motor_derecho + velocidad_derecha;
+    }
+
     if (velocidad_izquierda > 0)
     {
         analogWrite(Pwm1, velocidad_izquierda);
