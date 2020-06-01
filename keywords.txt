@@ -1,6 +1,7 @@
 Kit_seguidor	KEYWORD1
 Kit_bluetooth	KEYWORD1
 Kit_evasor  	KEYWORD1
+Kit_3_en_1	KEYWORD1
 modo_seguidor	KEYWORD2
 modo_evasor	KEYWORD2
 init    	KEYWORD2
@@ -8,3 +9,6 @@ leer_sensores   KEYWORD2
 print_sensores  KEYWORD2
 modo_seguidor   KEYWORD2
 modo_bluetooth  KEYWORD2
+modo_3_en_1	KEYWORD2
+compensar_motor_izquierdo	KEYWORD2
+compensar_motor_derecho	KEYWORD2
