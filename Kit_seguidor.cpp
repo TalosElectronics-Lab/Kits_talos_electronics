@@ -1,5 +1,5 @@
 #include <Kit_seguidor.h>
-void Kit_seguidor::frenos()
+void Kit_seguidor::frenos(int velocidad)
 {
   leer_sensores();
   if(sensor[4]==1)
@@ -7,7 +7,7 @@ void Kit_seguidor::frenos()
     while (sensor[3] == 0)
     {
       leer_sensores();
-      Motores_mv(50, -50);
+      Motores_mv(velocidad-20, -velocidad +40);
     }
   }
   else if(sensor[0] == 1)
@@ -15,7 +15,7 @@ void Kit_seguidor::frenos()
     while (sensor[1] == 0)
     {
       leer_sensores();
-      Motores_mv(-50, 50);
+      Motores_mv(-velocidad +40, velocidad -20);
     }
   }
 }
@@ -43,7 +43,7 @@ void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
   } else {
     Motores_mv(Velocidad, Velocidad - PID);
   }
-  frenos();
+  frenos(Velocidad);
 }
 
 void Kit_seguidor::init() {
