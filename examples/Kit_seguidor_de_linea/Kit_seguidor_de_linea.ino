@@ -21,11 +21,11 @@ void setup()
 {
     robot_1.init();
     Serial.begin(9600);
-    robot_1.compensar_motor_derecho(10);
+  //  robot_1.compensar_motor_derecho(10);
 }
 
 void loop()
 {
-    robot_1.modo_seguidor(7,1,0.8,70);//KP KI KD Velocidad
+    robot_1.modo_seguidor(20,1,55,85);//KP KI KD Velocidad
     //robot_1.print_sensores(); //muestra estado de los sensores
 }

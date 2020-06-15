@@ -1,4 +1,5 @@
 #include <Kit_seguidor.h>
+#include<math.h>
 void Kit_seguidor::frenos(int velocidad)
 {
   leer_sensores();
@@ -7,7 +8,7 @@ void Kit_seguidor::frenos(int velocidad)
     while (sensor[3] == 0)
     {
       leer_sensores();
-      Motores_mv(velocidad-20, -velocidad +40);
+      Motores_mv(velocidad-20, -velocidad +20);
     }
   }
   else if(sensor[0] == 1)
@@ -15,16 +16,18 @@ void Kit_seguidor::frenos(int velocidad)
     while (sensor[1] == 0)
     {
       leer_sensores();
-      Motores_mv(-velocidad +40, velocidad -20);
+      Motores_mv(-velocidad +20, velocidad -20);
     }
   }
 }
 void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
 {
   leer_sensores();
+  int velocidad_recta;
   P = Error;
   I = I + Anteriror_I;
   D = Error - Error_Anterior;
+  if ((P * I) < 0) I = 0; // corrige el overshooting - integral windup
 
   PID = (Kp * P) + (Ki * I) + (Kd * D);
 
@@ -37,12 +40,14 @@ void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
 
   Anteriror_I = I;
   Error_Anterior = Error;
+  velocidad_recta = 50 + (Velocidad + 20 - 50) * exp(-1 *abs(Kp * P));
 
   if (PID < 0) {
-    Motores_mv(Velocidad + PID, Velocidad);
+    Motores_mv(velocidad_recta + PID, velocidad_recta);
   } else {
-    Motores_mv(Velocidad, Velocidad - PID);
+    Motores_mv(velocidad_recta, velocidad_recta - PID);
   }
+
   frenos(Velocidad);
 }
 
@@ -83,6 +88,7 @@ void Kit_seguidor::leer_sensores() {
     Error = -3;
   else if ((sensor[0] == 1) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
     Error = -4;
+  
 }
 void Kit_seguidor::print_sensores() {
   for (size_t i = 0; i < 5; i++) {

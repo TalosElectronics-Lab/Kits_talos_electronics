@@ -22,6 +22,7 @@ private:
   bool sensor[5];
   float Error = 0, P = 0, I = 0, D = 0, PID = 0;
   float Error_Anterior = 0, Anteriror_I = 0;
+  bool Frenos;
 
 public:
     Kit_seguidor(/* args */);
@@ -31,6 +32,7 @@ public:
     void print_sensores();
     void modo_seguidor(float Kp, float Ki, float Kd, float Velocidad);
     void frenos(int velocidad);
+    
 };
 
 
