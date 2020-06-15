@@ -1,5 +1,5 @@
 #include <Kit_seguidor.h>
-#include<math.h>
+
 void Kit_seguidor::frenos(int velocidad)
 {
   leer_sensores();
