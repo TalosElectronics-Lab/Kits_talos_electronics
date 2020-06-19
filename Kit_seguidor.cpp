@@ -8,7 +8,7 @@ void Kit_seguidor::frenos(int velocidad)
     while (sensor[3] == 0)
     {
       leer_sensores();
-      Motores_mv(velocidad-20, -velocidad +20);
+      Motores_mv(50, -50);
     }
   }
   else if(sensor[0] == 1)
@@ -16,7 +16,7 @@ void Kit_seguidor::frenos(int velocidad)
     while (sensor[1] == 0)
     {
       leer_sensores();
-      Motores_mv(-velocidad +20, velocidad -20);
+      Motores_mv(-50, 50);
     }
   }
 }
@@ -25,11 +25,13 @@ void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
   leer_sensores();
   int velocidad_recta;
   P = Error;
-  I = I + Anteriror_I;
+  I = I + P;
   D = Error - Error_Anterior;
+  Error_Anterior = Error;
   if ((P * I) < 0) I = 0; // corrige el overshooting - integral windup
 
   PID = (Kp * P) + (Ki * I) + (Kd * D);
+ 
 
   // Limitamos la velocidad
   if (PID > Velocidad) {
@@ -37,16 +39,22 @@ void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
   } else if (PID < -Velocidad) {
     PID = -Velocidad;
   }
+  
+  
 
-  Anteriror_I = I;
-  Error_Anterior = Error;
-  velocidad_recta = 50 + (Velocidad + 20 - 50) * exp(-1 *abs(Kp * P));
+  velocidad_recta = 50 + (Velocidad + 20 - 50) * exp(-1 * abs(Kp * P));
+  velocidad_recta=Velocidad;
 
   if (PID < 0) {
     Motores_mv(velocidad_recta + PID, velocidad_recta);
   } else {
     Motores_mv(velocidad_recta, velocidad_recta - PID);
   }
+  Serial.print(Error);
+  Serial.print("\t");
+  Serial.print(PID);
+  Serial.print("\t");
+  Serial.println(velocidad_recta + PID);
 
   frenos(Velocidad);
 }
@@ -71,23 +79,16 @@ void Kit_seguidor::leer_sensores() {
     Error = Error;
   } 
   else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 1))
-    Error = 4;
-  else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 1) && (sensor[4] == 1))
-    Error = 3;
+    Error = 2.5;
   else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 1) && (sensor[4] == 0))
-    Error = 2;
-  else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 1) && (sensor[3] == 1) && (sensor[4] == 0))
-    Error = 1;
+    Error = 1.5;
   else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 1) && (sensor[3] == 0) && (sensor[4] == 0))
     Error = 0;
-  else if ((sensor[0] == 0) && (sensor[1] == 1) && (sensor[2] == 1) && (sensor[3] == 0) && (sensor[4] == 0))
-    Error = -1;
+  
   else if ((sensor[0] == 0) && (sensor[1] == 1) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-    Error = -2;
-  else if ((sensor[0] == 1) && (sensor[1] == 1) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-    Error = -3;
+    Error = -1.5;
   else if ((sensor[0] == 1) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-    Error = -4;
+    Error = -2.5;
   
 }
 void Kit_seguidor::print_sensores() {
