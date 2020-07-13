@@ -17,20 +17,22 @@ void Kit_3_en_1::init()
     pinMode(S5, INPUT_PULLUP);
 }
 void Kit_3_en_1::modo_3_en_1(){
-    Serial.print("Estado: ");
-    Serial.println(Estado);
-    Serial.print("Menu: ");
-    Serial.println(Menu);
-    Estado = Leer_BT();
+
+    if (Bluetooth.available() > 0)
+    {
+        Estado = Bluetooth.read();
+        //Serial.println(Estado);
+       
+    }
     if (Estado == 'a')
     {
         Menu = 30;
     }
-    if (Estado == 'b')
+    else if (Estado == 'b')
     {
         Menu = 10;
     }
-    if (Estado == 'c')
+    else if (Estado == 'c')
     {
         Menu = 20;
     }
@@ -38,52 +40,56 @@ void Kit_3_en_1::modo_3_en_1(){
     switch (Menu)
     {
     case 10:
-        Estado = Leer_BT();
+        if (Bluetooth.available() > 0)
+        {
+            Estado = Bluetooth.read();
+            //Serial.println(Estado);
+        }
         if (Estado == '1')
         {
             //Arriba_Izquierda
             Motores_mv(Velocidad_Med, Velocidad_Max);
         }
-        if (Estado == '2')
+        else if (Estado == '2')
         {
             //Derecho
             Motores_mv(Velocidad_Max, Velocidad_Max);
         }
-        if (Estado == '3')
+        else if (Estado == '3')
         {
             //Arriba_Derecha
             Motores_mv(Velocidad_Max, Velocidad_Med);
         }
-        if (Estado == '4')
+        else if (Estado == '4')
         {
             //Girar a la izquierda
             Motores_mv(-Velocidad_Max, Velocidad_Max);
         }
-        if (Estado == '5')
+        else if (Estado == '5')
         {
             //Serial.println("Logo talos");
         }
-        if (Estado == '6')
+        else if (Estado == '6')
         {
             //Girar a la derecha
             Motores_mv(Velocidad_Max, -Velocidad_Max);
         }
-        if (Estado == '7')
+        else if (Estado == '7')
         {
             //Abajo Izquierda
             Motores_mv(-Velocidad_Med, -Velocidad_Max);
         }
-        if (Estado == '8')
+        else if (Estado == '8')
         {
             //Reversa
             Motores_mv(-Velocidad_Max, -Velocidad_Max);
         }
-        if (Estado == '9')
+        else if (Estado == '9')
         {
             //Abajo Derecha
             Motores_mv(-Velocidad_Max, -Velocidad_Med);
         }
-        if (Estado == 'w')
+        else if (Estado == 'w')
         {
             Motores_mv(0, 0);
         }
@@ -94,7 +100,7 @@ void Kit_3_en_1::modo_3_en_1(){
         break;
 
     case 30:
-        modo_seguidor(10, 1, 5, 80);
+        modo_seguidor(8, .2, 5, 50);
         break;
     }
 }
@@ -183,7 +189,6 @@ float Kit_3_en_1::obtener_distancia()
     ldistance = (lduration / 2) / 29.1;
     return ldistance;
 }
-
 void Kit_3_en_1::frenos()
 {
     leer_sensores();
@@ -207,9 +212,13 @@ void Kit_3_en_1::frenos()
 void Kit_3_en_1::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
 {
     leer_sensores();
+    int velocidad_recta;
     P = Error;
-    I = I + Anteriror_I;
+    I = I + P;
     D = Error - Error_Anterior;
+    Error_Anterior = Error;
+    if ((P * I) < 0)
+        I = 0; // corrige el overshooting - integral windup
 
     PID = (Kp * P) + (Ki * I) + (Kd * D);
 
@@ -223,17 +232,25 @@ void Kit_3_en_1::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
         PID = -Velocidad;
     }
 
-    Anteriror_I = I;
-    Error_Anterior = Error;
+    velocidad_recta = 50 + (Velocidad + 20 - 50) * exp(-1 * abs(Kp * P));
+   
 
     if (PID < 0)
     {
-        Motores_mv(Velocidad + PID, Velocidad);
+        Motores_mv(velocidad_recta + PID, velocidad_recta);
     }
     else
     {
-        Motores_mv(Velocidad, Velocidad - PID);
+        Motores_mv(velocidad_recta, velocidad_recta - PID);
     }
+    /*
+    Serial.print(Error);
+    Serial.print("\t");
+    Serial.print(PID);
+    Serial.print("\t");
+    Serial.println(velocidad_recta + PID);
+    */
+
     frenos();
 }
 
@@ -251,23 +268,16 @@ void Kit_3_en_1::leer_sensores()
         Error = Error;
     }
     else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 1))
-        Error = 4;
-    else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 1) && (sensor[4] == 1))
-        Error = 3;
+        Error = 2.5;
     else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 1) && (sensor[4] == 0))
-        Error = 2;
-    else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 1) && (sensor[3] == 1) && (sensor[4] == 0))
-        Error = 1;
+        Error = 1.5;
     else if ((sensor[0] == 0) && (sensor[1] == 0) && (sensor[2] == 1) && (sensor[3] == 0) && (sensor[4] == 0))
         Error = 0;
-    else if ((sensor[0] == 0) && (sensor[1] == 1) && (sensor[2] == 1) && (sensor[3] == 0) && (sensor[4] == 0))
-        Error = -1;
+
     else if ((sensor[0] == 0) && (sensor[1] == 1) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-        Error = -2;
-    else if ((sensor[0] == 1) && (sensor[1] == 1) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-        Error = -3;
+        Error = -1.5;
     else if ((sensor[0] == 1) && (sensor[1] == 0) && (sensor[2] == 0) && (sensor[3] == 0) && (sensor[4] == 0))
-        Error = -4;
+        Error = -2.5;
 }
 void Kit_3_en_1::print_sensores()
 {

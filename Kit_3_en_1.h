@@ -16,7 +16,7 @@ private:
 
     const uint8_t Echo = 11;
     const uint8_t Trigger = 10;
-    const uint8_t Servo_pin = 13;
+    const uint8_t Servo_pin = A4;
     uint8_t Angulo_min = 0;
     uint8_t Angulo_max = 180;
     uint8_t velocidad_giro = 50;

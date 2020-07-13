@@ -43,7 +43,7 @@ void Kit_seguidor::modo_seguidor(float Kp, float Ki, float Kd, float Velocidad)
   
 
   velocidad_recta = 50 + (Velocidad + 20 - 50) * exp(-1 * abs(Kp * P));
-  velocidad_recta=Velocidad;
+  //velocidad_recta=Velocidad;
 
   if (PID < 0) {
     Motores_mv(velocidad_recta + PID, velocidad_recta);
