@@ -16,6 +16,6 @@ void setup()
 }
 void loop()
 {
-    Robot.Modo_bluetooth();
+    Robot.modo_bluetooth();
     
 }
