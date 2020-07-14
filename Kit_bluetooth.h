@@ -14,6 +14,7 @@ private:
     /* data */
     const uint8_t B_TX= 8;
     const uint8_t B_RX= 9;
+    const uint8_t Buzzer = A4;
     SoftwareSerial Bluetooth; // RX, TX
     char Estado;
 

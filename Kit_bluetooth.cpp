@@ -5,7 +5,9 @@ Kit_bluetooth::~Kit_bluetooth() {}
 void Kit_bluetooth::init()
 {
     Motores_init();
+    pinMode(Buzzer,OUTPUT);
     Bluetooth.begin(9600);
+    digitalWrite(Buzzer, HIGH);
 
 }
 
@@ -46,6 +48,7 @@ void Kit_bluetooth::modo_bluetooth()
     if (Estado == '5')
     {
         //Serial.println("Logo talos");
+        digitalWrite(Buzzer,LOW);
     }
     if (Estado == '6')
     {
@@ -70,5 +73,6 @@ void Kit_bluetooth::modo_bluetooth()
     if (Estado == 'w')
     {
         Motores_mv(0, 0);
+        digitalWrite(Buzzer, HIGH);
     }
 }
